@@ -6,20 +6,23 @@ use App\Models\Pet;
 
 class PetService
 {
-    public function list(array $filters = [])
+    public function list(array $filters)
     {
         $query = Pet::query();
 
         if (!empty($filters['name'])) {
-            $query->where('name', 'like', "%{$filters['name']}%");
+            $query->where('name', 'like', '%' . $filters['name'] . '%');
         }
 
         if (!empty($filters['type'])) {
             $query->where('type', $filters['type']);
         }
 
-        return $query->paginate(10);
+        $perPage = $filters['per_page'] ?? 10;
+
+        return $query->paginate($perPage);
     }
+
 
     public function show(int $id): Pet
     {
