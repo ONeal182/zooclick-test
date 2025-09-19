@@ -7,9 +7,25 @@ use Illuminate\Support\Facades\Http;
 
 class VaccinationService
 {
-    public function list(array $filters = [])
+    public function list(array $filters)
     {
-        return Vaccination::paginate(10);
+        $query = Vaccination::query();
+
+        if (!empty($filters['serial_number'])) {
+            $query->where('serial_number', 'like', '%' . $filters['serial_number'] . '%');
+        }
+
+        if (!empty($filters['country'])) {
+            $query->where('country', $filters['country']);
+        }
+
+        if (!empty($filters['pet_id'])) {
+            $query->where('pet_id', $filters['pet_id']);
+        }
+
+        $perPage = $filters['per_page'] ?? 15;
+
+        return $query->paginate($perPage);
     }
 
     public function create(array $data): Vaccination
