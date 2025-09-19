@@ -1,0 +1,39 @@
+# OS junk files
+.DS_Store
+Thumbs.db
+
+# PHPStorm / VSCode / IDE
+.idea/
+.vscode/
+
+# Node
+node_modules/
+
+# Composer vendor
+/vendor/
+/src/vendor/
+
+# Laravel cache & logs
+/src/storage/*.key
+/src/storage/app/public
+/src/storage/framework/cache/*
+/src/storage/framework/sessions/*
+/src/storage/framework/views/*
+/src/storage/logs/*
+/src/bootstrap/cache/*.php
+
+# Laravel environment
+/src/.env
+/.env
+
+# Docker
+/docker/mysql/
+/docker/php/local.ini
+docker-compose.override.yml
+
+# Cache
+.phpunit.result.cache
+composer.lock
+
+# Other
+*.log
