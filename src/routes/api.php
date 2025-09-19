@@ -17,3 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::apiResource('pet', \App\Http\Controllers\Api\PetController::class);
+
+Route::apiResource('vaccination', \App\Http\Controllers\Api\VaccinationController::class);
