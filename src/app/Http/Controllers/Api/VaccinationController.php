@@ -23,6 +23,13 @@ class VaccinationController extends Controller
      *     summary="Get paginated list of vaccinations",
      *     tags={"Vaccination"},
      *     security={{"sanctum":{}}},
+     *     @OA\Parameter(name="page", in="query", description="Page number", required=false, @OA\Schema(type="integer", example=1)),
+     *     @OA\Parameter(name="per_page", in="query", description="Items per page", required=false, @OA\Schema(type="integer", example=10)),
+     *     @OA\Parameter(name="pet_id", in="query", description="Filter by pet ID", required=false, @OA\Schema(type="integer", example=1)),
+     *     @OA\Parameter(name="serial_number", in="query", description="Filter by serial number", required=false, @OA\Schema(type="string", example="5YY9D-A8ff")),
+     *     @OA\Parameter(name="vaccinated_at", in="query", description="Filter by vaccination date", required=false, @OA\Schema(type="string", format="date", example="2025-09-19")),
+     *     @OA\Parameter(name="valid_days", in="query", description="Filter by valid_days", required=false, @OA\Schema(type="integer", example=365)),
+     *     @OA\Parameter(name="country", in="query", description="Filter by country", required=false, @OA\Schema(type="string", example="USA")),
      *     @OA\Response(
      *         response=200,
      *         description="Paginated list of vaccinations",
