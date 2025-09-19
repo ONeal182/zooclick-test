@@ -23,8 +23,10 @@ class PetController extends Controller
      *     summary="Get paginated list of pets",
      *     tags={"Pet"},
      *     security={{"sanctum":{}}},
-     *     @OA\Parameter(name="page", in="query", @OA\Schema(type="integer"), description="Page number"),
-     *     @OA\Parameter(name="per_page", in="query", @OA\Schema(type="integer"), description="Items per page"),
+     *     @OA\Parameter(name="page", in="query", description="Page number", required=false, @OA\Schema(type="integer", example=1)),
+     *     @OA\Parameter(name="per_page", in="query", description="Items per page", required=false, @OA\Schema(type="integer", example=10)),
+     *     @OA\Parameter(name="name", in="query", description="Filter by pet name", required=false, @OA\Schema(type="string", example="Lucky")),
+     *     @OA\Parameter(name="type", in="query", description="Filter by pet type", required=false, @OA\Schema(type="string", example="dog")),
      *     @OA\Response(
      *         response=200,
      *         description="Paginated list of pets",
