@@ -12,8 +12,8 @@ use App\Http\Controllers\Controller;
  * )
  *
  * @OA\Server(
- *     url="http://localhost:8080",
- *     description="Local server"
+ *     url="L5_SWAGGER_CONST_HOST",
+ *     description="Server"
  * )
  *
  * @OA\SecurityScheme(
