@@ -9,37 +9,26 @@ class VaccinationService
 {
     public function list(array $filters = [])
     {
-        $query = Vaccination::query();
-
-        if (!empty($filters['serial_number'])) {
-            $query->where('serial_number', 'like', "%{$filters['serial_number']}%");
-        }
-
-        if (!empty($filters['country'])) {
-            $query->where('country', $filters['country']);
-        }
-
-        return $query->paginate(10);
-    }
-
-    public function show(int $id): Vaccination
-    {
-        return Vaccination::findOrFail($id);
+        return Vaccination::paginate(10);
     }
 
     public function create(array $data): Vaccination
     {
-        $vaccination = Vaccination::create($data);
-        $country = $this->fetchCountry($vaccination->serial_number);
-        if ($country) {
-            $vaccination->update(['country' => $country]);
+        if (!empty($data['serial_number'])) {
+            $data['country'] = $this->fetchCountry($data['serial_number']);
         }
-        return $vaccination;
+
+        return Vaccination::create($data);
     }
 
     public function update(Vaccination $vaccination, array $data): Vaccination
     {
+        if (isset($data['serial_number']) && $data['serial_number'] !== $vaccination->serial_number) {
+            $data['country'] = $this->fetchCountry($data['serial_number']);
+        }
+
         $vaccination->update($data);
+
         return $vaccination;
     }
 
@@ -48,13 +37,14 @@ class VaccinationService
         $vaccination->delete();
     }
 
-    private function fetchCountry(string $serial): ?string
+    private function fetchCountry(string $uuid): ?string
     {
-        $url = "https://f9ef4591e5c6e3f9.mokky.dev/vaccinations?uuid={$serial}";
+        $url = "https://f9ef4591e5c6e3f9.mokky.dev/vaccinations?uuid={$uuid}";
         $response = Http::get($url);
 
-        if ($response->successful() && !empty($response[0]['country'])) {
-            return $response[0]['country'];
+        if ($response->successful()) {
+            $data = $response->json();
+            return $data[0]['country'] ?? null;
         }
 
         return null;

@@ -27,4 +27,22 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
+    public function render($request, Throwable $exception)
+    {
+        if ($exception instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {
+            $model = class_basename($exception->getModel());
+    
+            return response()->json([
+                'message' => "{$model} not found"
+            ], 404);
+        }
+    
+        if ($exception instanceof \Illuminate\Auth\AuthenticationException) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+    
+        return parent::render($request, $exception);
+    }    
+
 }
