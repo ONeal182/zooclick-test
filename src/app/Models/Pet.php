@@ -9,11 +9,13 @@ class Pet extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'type'];
+    protected $fillable = [
+        'name',
+        'type',
+    ];
 
     public function vaccinations()
     {
         return $this->hasMany(Vaccination::class);
     }
 }
-

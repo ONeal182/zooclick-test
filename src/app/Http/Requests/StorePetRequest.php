@@ -3,17 +3,14 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Rules\SerialNumberRule;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class StoreVaccinationRequest extends FormRequest
+class StorePetRequest extends FormRequest
 {
-    protected $redirect = null;
-
     public function authorize(): bool
     {
-        return true;
+        return true; // авторизация делается через Policy
     }
 
     protected function failedValidation(Validator $validator)
@@ -25,14 +22,12 @@ class StoreVaccinationRequest extends FormRequest
             ], 422)
         );
     }
-    
+
     public function rules(): array
     {
         return [
-            'pet_id' => ['required', 'exists:pets,id'],
-            'serial_number' => ['required', 'string', 'unique:vaccinations,serial_number', new SerialNumberRule()],
-            'vaccinated_at' => ['required', 'date'],
-            'valid_days' => ['required', 'integer', 'min:1'],
+            'name' => ['required', 'string'],
+            'type' => ['required', 'string'],
         ];
     }
 }

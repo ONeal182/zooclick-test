@@ -7,6 +7,8 @@ use App\Rules\SerialNumberRule;
 
 class UpdateVaccinationRequest extends FormRequest
 {
+    protected $redirect = null;
+
     public function authorize(): bool
     {
         return true;
@@ -15,10 +17,10 @@ class UpdateVaccinationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'pet_id' => ['sometimes', 'exists:pets,id'],
-            'serial_number' => ['sometimes', 'unique:vaccinations,serial_number,' . $this->route('id'), new SerialNumberRule()],
-            'vaccinated_at' => ['sometimes', 'date'],
-            'valid_days' => ['sometimes', 'integer', 'min:1'],
+            'pet_id' => ['sometimes', 'required', 'exists:pets,id'],
+            'serial_number' => ['sometimes', 'required', 'string', 'unique:vaccinations,serial_number,' . $this->vaccination->id, new SerialNumberRule()],
+            'vaccinated_at' => ['sometimes', 'required', 'date'],
+            'valid_days' => ['sometimes', 'required', 'integer', 'min:1'],
         ];
     }
 }
