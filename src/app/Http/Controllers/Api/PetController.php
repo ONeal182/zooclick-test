@@ -51,6 +51,7 @@ class PetController extends Controller
      *     security={{"sanctum":{}}},
      *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
      *     @OA\Response(response=200, description="Pet found", @OA\JsonContent(ref="#/components/schemas/Pet")),
+     *     @OA\Response(response=401, description="Unauthorized. Bearer token missing or invalid"),
      *     @OA\Response(response=404, description="Pet not found")
      * )
      */
@@ -67,7 +68,8 @@ class PetController extends Controller
      *     security={{"sanctum":{}}},
      *     @OA\RequestBody(required=true, @OA\JsonContent(ref="#/components/schemas/Pet")),
      *     @OA\Response(response=201, description="Pet created", @OA\JsonContent(ref="#/components/schemas/Pet")),
-     *     @OA\Response(response=422, description="Validation error")
+     *     @OA\Response(response=422, description="Validation error"),
+     *     @OA\Response(response=401, description="Unauthorized. Bearer token missing or invalid")
      * )
      */
     public function store(StorePetRequest $request)
@@ -85,7 +87,8 @@ class PetController extends Controller
      *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
      *     @OA\RequestBody(@OA\JsonContent(ref="#/components/schemas/Pet")),
      *     @OA\Response(response=200, description="Pet updated", @OA\JsonContent(ref="#/components/schemas/Pet")),
-     *     @OA\Response(response=404, description="Pet not found")
+     *     @OA\Response(response=404, description="Pet not found"),
+     *     @OA\Response(response=401, description="Unauthorized. Bearer token missing or invalid")
      * )
      */
     public function update(UpdatePetRequest $request, Pet $pet)
@@ -101,7 +104,8 @@ class PetController extends Controller
      *     security={{"sanctum":{}}},
      *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
      *     @OA\Response(response=204, description="Pet deleted"),
-     *     @OA\Response(response=404, description="Pet not found")
+     *     @OA\Response(response=404, description="Pet not found"),
+     *     @OA\Response(response=401, description="Unauthorized. Bearer token missing or invalid")
      * )
      */
     public function destroy(Pet $pet)

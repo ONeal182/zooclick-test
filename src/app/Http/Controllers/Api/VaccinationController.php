@@ -54,7 +54,8 @@ class VaccinationController extends Controller
      *     security={{"sanctum":{}}},
      *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
      *     @OA\Response(response=200, description="Vaccination found", @OA\JsonContent(ref="#/components/schemas/Vaccination")),
-     *     @OA\Response(response=404, description="Vaccination not found")
+     *     @OA\Response(response=404, description="Vaccination not found"),
+     *     @OA\Response(response=401, description="Unauthorized. Bearer token missing or invalid")
      * )
      */
     public function show(Vaccination $vaccination)
@@ -70,7 +71,8 @@ class VaccinationController extends Controller
      *     security={{"sanctum":{}}},
      *     @OA\RequestBody(required=true, @OA\JsonContent(ref="#/components/schemas/Vaccination")),
      *     @OA\Response(response=201, description="Vaccination created", @OA\JsonContent(ref="#/components/schemas/Vaccination")),
-     *     @OA\Response(response=422, description="Validation error")
+     *     @OA\Response(response=422, description="Validation error"),
+     *     @OA\Response(response=401, description="Unauthorized. Bearer token missing or invalid")
      * )
      */
     public function store(StoreVaccinationRequest $request)
@@ -88,7 +90,8 @@ class VaccinationController extends Controller
      *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
      *     @OA\RequestBody(@OA\JsonContent(ref="#/components/schemas/Vaccination")),
      *     @OA\Response(response=200, description="Vaccination updated", @OA\JsonContent(ref="#/components/schemas/Vaccination")),
-     *     @OA\Response(response=404, description="Vaccination not found")
+     *     @OA\Response(response=404, description="Vaccination not found"),
+     *     @OA\Response(response=401, description="Unauthorized. Bearer token missing or invalid")
      * )
      */
     public function update(UpdateVaccinationRequest $request, Vaccination $vaccination)
@@ -106,7 +109,8 @@ class VaccinationController extends Controller
      *     security={{"sanctum":{}}},
      *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
      *     @OA\Response(response=204, description="Vaccination deleted"),
-     *     @OA\Response(response=404, description="Vaccination not found")
+     *     @OA\Response(response=404, description="Vaccination not found"),
+     *     @OA\Response(response=401, description="Unauthorized. Bearer token missing or invalid")
      * )
      */
     public function destroy(Vaccination $vaccination)
