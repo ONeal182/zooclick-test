@@ -17,27 +17,91 @@ class VaccinationController extends Controller
         $this->authorizeResource(Vaccination::class, 'vaccination');
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/vaccination",
+     *     summary="Get paginated list of vaccinations",
+     *     tags={"Vaccination"},
+     *     security={{"sanctum":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Paginated list of vaccinations",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/Vaccination")),
+     *             @OA\Property(property="links", type="object"),
+     *             @OA\Property(property="meta", type="object")
+     *         )
+     *     )
+     * )
+     */
     public function index(Request $request)
     {
         return VaccinationResource::collection($this->service->list($request->all()));
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/vaccination/{id}",
+     *     summary="Get vaccination by ID",
+     *     tags={"Vaccination"},
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="Vaccination found", @OA\JsonContent(ref="#/components/schemas/Vaccination")),
+     *     @OA\Response(response=404, description="Vaccination not found")
+     * )
+     */
     public function show(Vaccination $vaccination)
     {
         return new VaccinationResource($vaccination);
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/vaccination",
+     *     summary="Create new vaccination",
+     *     tags={"Vaccination"},
+     *     security={{"sanctum":{}}},
+     *     @OA\RequestBody(required=true, @OA\JsonContent(ref="#/components/schemas/Vaccination")),
+     *     @OA\Response(response=201, description="Vaccination created", @OA\JsonContent(ref="#/components/schemas/Vaccination")),
+     *     @OA\Response(response=422, description="Validation error")
+     * )
+     */
     public function store(StoreVaccinationRequest $request)
     {
         $vaccination = $this->service->create($request->validated());
-        return new VaccinationResource($vaccination);
+        return (new VaccinationResource($vaccination))->response()->setStatusCode(201);
     }
 
+    /**
+     * @OA\Put(
+     *     path="/api/vaccination/{id}",
+     *     summary="Update vaccination",
+     *     tags={"Vaccination"},
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\RequestBody(@OA\JsonContent(ref="#/components/schemas/Vaccination")),
+     *     @OA\Response(response=200, description="Vaccination updated", @OA\JsonContent(ref="#/components/schemas/Vaccination")),
+     *     @OA\Response(response=404, description="Vaccination not found")
+     * )
+     */
     public function update(UpdateVaccinationRequest $request, Vaccination $vaccination)
     {
-        return new VaccinationResource($this->service->update($vaccination, $request->validated()));
+        return new VaccinationResource(
+            $this->service->update($vaccination, $request->validated())
+        );
     }
 
+    /**
+     * @OA\Delete(
+     *     path="/api/vaccination/{id}",
+     *     summary="Delete vaccination",
+     *     tags={"Vaccination"},
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response=204, description="Vaccination deleted"),
+     *     @OA\Response(response=404, description="Vaccination not found")
+     * )
+     */
     public function destroy(Vaccination $vaccination)
     {
         $this->service->delete($vaccination);

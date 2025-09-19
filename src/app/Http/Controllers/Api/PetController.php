@@ -17,27 +17,91 @@ class PetController extends Controller
         $this->authorizeResource(Pet::class, 'pet');
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/pet",
+     *     summary="Get paginated list of pets",
+     *     tags={"Pet"},
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(name="page", in="query", @OA\Schema(type="integer"), description="Page number"),
+     *     @OA\Parameter(name="per_page", in="query", @OA\Schema(type="integer"), description="Items per page"),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Paginated list of pets",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/Pet")),
+     *             @OA\Property(property="links", type="object"),
+     *             @OA\Property(property="meta", type="object")
+     *         )
+     *     )
+     * )
+     */
     public function index(Request $request)
     {
         return PetResource::collection($this->service->list($request->all()));
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/pet/{id}",
+     *     summary="Get pet by ID",
+     *     tags={"Pet"},
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response=200, description="Pet found", @OA\JsonContent(ref="#/components/schemas/Pet")),
+     *     @OA\Response(response=404, description="Pet not found")
+     * )
+     */
     public function show(Pet $pet)
     {
         return new PetResource($pet);
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/pet",
+     *     summary="Create new pet",
+     *     tags={"Pet"},
+     *     security={{"sanctum":{}}},
+     *     @OA\RequestBody(required=true, @OA\JsonContent(ref="#/components/schemas/Pet")),
+     *     @OA\Response(response=201, description="Pet created", @OA\JsonContent(ref="#/components/schemas/Pet")),
+     *     @OA\Response(response=422, description="Validation error")
+     * )
+     */
     public function store(StorePetRequest $request)
     {
         $pet = $this->service->create($request->validated());
-        return new PetResource($pet);
+        return (new PetResource($pet))->response()->setStatusCode(201);
     }
 
+    /**
+     * @OA\Put(
+     *     path="/api/pet/{id}",
+     *     summary="Update pet",
+     *     tags={"Pet"},
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\RequestBody(@OA\JsonContent(ref="#/components/schemas/Pet")),
+     *     @OA\Response(response=200, description="Pet updated", @OA\JsonContent(ref="#/components/schemas/Pet")),
+     *     @OA\Response(response=404, description="Pet not found")
+     * )
+     */
     public function update(UpdatePetRequest $request, Pet $pet)
     {
         return new PetResource($this->service->update($pet, $request->validated()));
     }
 
+    /**
+     * @OA\Delete(
+     *     path="/api/pet/{id}",
+     *     summary="Delete pet",
+     *     tags={"Pet"},
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
+     *     @OA\Response(response=204, description="Pet deleted"),
+     *     @OA\Response(response=404, description="Pet not found")
+     * )
+     */
     public function destroy(Pet $pet)
     {
         $this->service->delete($pet);
