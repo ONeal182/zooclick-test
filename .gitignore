@@ -37,3 +37,9 @@ composer.lock
 
 # Other
 *.log
+
+# Swagger generated files
+/storage/api-docs
+/public/docs
+/public/api-docs.json
+/public/api-docs.yaml
