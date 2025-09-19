@@ -12,16 +12,19 @@ use Illuminate\Http\Request;
 
 class VaccinationController extends Controller
 {
-    public function __construct(private VaccinationService $service) {}
+    public function __construct(private VaccinationService $service)
+    {
+        $this->authorizeResource(Vaccination::class, 'vaccination');
+    }
 
     public function index(Request $request)
     {
         return VaccinationResource::collection($this->service->list($request->all()));
     }
 
-    public function show(int $id)
+    public function show(Vaccination $vaccination)
     {
-        return new VaccinationResource($this->service->show($id));
+        return new VaccinationResource($vaccination);
     }
 
     public function store(StoreVaccinationRequest $request)
