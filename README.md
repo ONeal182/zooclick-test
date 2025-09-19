@@ -27,6 +27,12 @@ docker-compose up -d --build
 docker-compose exec app php artisan migrate:fresh --seed
 ```
 
+Сгенерировать Swagger-документацию:
+
+```bash
+docker-compose exec app php artisan l5-swagger:generate
+```
+
 ---
 
 ## 🔑 Авторизация
